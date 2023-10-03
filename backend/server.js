@@ -8,9 +8,10 @@ const PORT = process.env.PORT || 3001
 
 connectDB()
 
-app.use(express.json())
+app.use(express.json()) // yang ini terakhir aja, liat di stackoverflow
 
 app.use('/', require('./routes/root'))
+
 
 app.use('/users', require('./routes/userRoutes'))
 
@@ -25,13 +26,11 @@ app.all('*', (req, res) => {
 })
 
 mongoose.connection.once('open', ()=>{
-    console.log('conn')
+    console.log('connected!')
     app.listen(PORT, () => {
         console.log(`server running on ${PORT}`)
     })
 })
 mongoose.connection.on('error', err =>{
     console.log(err)
-
 })
-

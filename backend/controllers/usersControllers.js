@@ -43,17 +43,43 @@ const createNewUser = asyncHandler (async (req,res) => {
     }
 })
 
-// @desc Update all users
+// @desc Update all users000
 // @route PATCH /users
 // @access private
 const updateUser = asyncHandler (async (req,res) => {
+    const { id, username, roles, active, password } = req.body
 
+    const user = await User.findById(id).exec()
+
+    user.username = username
+    user.roles = roles
+    user.active = active
+
+    const updateUser = await user.save()
+
+    res.json({ message : "updated"})
 })
 
 // @desc Delete all users
 // @route DELETE /users
 // @access private
 const deleteUser = asyncHandler (async (req,res) => {
+    const { id } = req.body
+
+    if (!id) {
+        return res.status(400).json({ message : 'id required'})
+    }
+
+    const user = await User.findById(id).exec()
+
+    if (!user) {
+        return res.status(400).json({ message : 'user not found'})
+    }
+
+    const penghapusan = await user.deleteOne()
+    const reply = `user dengan username ${ penghapusan.username } dihapus`
+
+    res.json(reply)
 
 })
 
